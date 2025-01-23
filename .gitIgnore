@@ -1,1 +1,5 @@
+# Excel file
 *.xlsm
+
+# Python cache
+/src/modules/__pycache__
