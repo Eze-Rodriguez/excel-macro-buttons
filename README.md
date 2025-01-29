@@ -11,7 +11,12 @@ Desarrollaremos codigos de Excel Macros para que realicen distintas funciones ne
 **Bibliotecas utilizadas:** xlwings
 
 ## Instalación
+1 - En la terminal se deberá ejecutar el siguiente comando:
+```console
+xlwings addin install
+```
 
+2 - Configurar PYTHONPATH (xlwings add-in) a la raiz de este repositorio.
 
 # 🔗 Contacto
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ezequiel-matias-rodriguez-094b76188/)
