@@ -38,5 +38,5 @@ def liquidar_button(button):
     root.withdraw()  # Hide the root window
     messagebox.showinfo(
         f"Fila {button_row}: Añadida satisfactoriamente",
-        f"La entrada en fila N° {button_row} fue añadida satisfactoriamente a la liquidación",
+        f"La entrada en fila N° {button_row} fue añadida satisfactoriamente a la liquidación.",
     )  # Info message box
