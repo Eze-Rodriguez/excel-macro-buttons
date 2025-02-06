@@ -1,3 +1,10 @@
+""" The following macro function must be created in Excel and assigned to each button on the GALPON sheet
+
+Sub entryButton()
+    RunPython "from src.modules.galpon.merchEntryButton import entry_button; entry_button()"
+End Sub
+"""
+
 import xlwings as xw
 import tkinter as tk
 from tkinter import messagebox
@@ -21,7 +28,6 @@ def entry_button():
             article = galpon_sheet.range(f"E{row}").value
             quantity = galpon_sheet.range(f"F{row}").value
 
-            # Proceed only if all required fields have values
             entrada_sheet.api.Rows(3).Insert(Shift=-4121)  # Insert a new row at position 3
 
             # Insert values into the new row in ENTRADA sheet

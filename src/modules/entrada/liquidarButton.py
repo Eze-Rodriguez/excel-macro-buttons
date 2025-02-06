@@ -1,3 +1,14 @@
+""" The following macro function must be created in Excel and assigned to each button on the ENTRADA sheet
+
+Sub liquidateMerch()
+    Dim btn As Shape
+    Set btn = ActiveSheet.Shapes(Application.Caller) ' Gets the button that was clicked
+
+    ' Calls Python, passing the button name
+    RunPython "from src.modules.entrada.liquidarButton import liquidar_button; liquidar_button('" & btn.Name & "')"
+End Sub
+"""
+
 import xlwings as xw
 import tkinter as tk
 from tkinter import messagebox
