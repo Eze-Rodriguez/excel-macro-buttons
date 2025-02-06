@@ -8,49 +8,43 @@ from datetime import date
 def entry_button():
     # Get the active workbook and sheet
     wb = xw.Book.caller()
-    sheet = wb.sheets.active
     # Get the source sheet (GALPON) where the values will be retrieve and the target sheet (ENTRADA) where the values will be pasted
     galpon_sheet = wb.sheets["GALPON"]
     entrada_sheet = wb.sheets["ENTRADA"]
 
-    last_row = (
-        galpon_sheet.range("B" + str(galpon_sheet.cells.last_cell.row)).end("up").row
-    )
-    entry_field = galpon_sheet.range("C4").value
+    # Find the last row with data in column C
+    last_row = galpon_sheet.range("B" + str(galpon_sheet.cells.last_cell.row)).end("up").row
 
-    if entry_field:
-        for row in range(4, last_row):
-            # Retrieve values from GALPON sheet
+    # Ensure there are entries to process
+    if last_row >= 4:
+        for row in range(last_row, 3, -1):  # Iterate from bottom to top
             provider = galpon_sheet.range(f"C{row}").value
             article = galpon_sheet.range(f"E{row}").value
             quantity = galpon_sheet.range(f"F{row}").value
 
-            # Inserts new empty row
-            entrada_sheet.api.Rows(3).Insert(Shift=-4121)
+            # Proceed only if all required fields have values
+            entrada_sheet.api.Rows(3).Insert(Shift=-4121)  # Insert a new row at position 3
 
-            # Paste values to ENTRADA sheet
-            entrada_sheet.range("B3").value = date.today().strftime(
-                "%m/%d/%Y"
-            )  # Set the current local date
+            # Insert values into the new row in ENTRADA sheet
+            entrada_sheet.range("B3").value = date.today().strftime("%m/%d/%Y")
             entrada_sheet.range("C3").value = provider
             entrada_sheet.range("D3").value = article
             entrada_sheet.range("E3").value = quantity
 
-            liquidar_cell = entrada_sheet.range(
-                "H3"
-            )  # Retrieve cell where will be the button "Liquidar"
-            X, Y = liquidar_cell.left, liquidar_cell.top  # Cell coordinates
-            # Create the button "Liquidar" (Shape)
-            liquidar_shape = entrada_sheet.api.Shapes.AddShape(1, X, Y, 215, 30)
-            liquidar_shape.TextFrame.Characters().Text = "LIQUIDAR"
-            liquidar_shape.TextFrame.HorizontalAlignment = -4108
-            liquidar_shape.TextFrame.VerticalAlignment = -4108
-            liquidar_shape.Placement = 2
-            liquidar_shape.OnAction = "liquidateMerch"
+            # Retrieve the cell where the "LIQUIDAR" button will be placed
+            liquidar_cell = entrada_sheet.range("H3")
+            x, y = liquidar_cell.left, liquidar_cell.top  # Get cell coordinates
 
-            # Delete added entries
-            galpon_sheet.range(f"B{row}:F{row}").delete()
-            time.sleep(1)  # Wait 1 sec
+            # Create the "LIQUIDAR" button (Shape)
+            liquidar_shape = entrada_sheet.api.Shapes.AddShape(1, x, y, 215, 30)
+            liquidar_shape.TextFrame.Characters().Text = "LIQUIDAR"
+            liquidar_shape.TextFrame.HorizontalAlignment = -4108  # Center text horizontally
+            liquidar_shape.TextFrame.VerticalAlignment = -4108  # Center text vertically
+            liquidar_shape.Placement = 1
+            liquidar_shape.OnAction = "liquidateMerch"  # Assign macro
+
+            # Delete processed row in GALPON sheet
+            galpon_sheet.range(f"B{row}:F{row}").delete(shift="up")
 
         # Displays a message box
         root = tk.Tk()
