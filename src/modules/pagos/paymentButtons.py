@@ -67,19 +67,23 @@ def save_payment(paymentType):
     match paymentType:
         case "client":
             # Retrieve values from PAGOS sheet
+            date = pagos_sheet.range("B3").value
+            client = pagos_sheet.range("D3").value
             receipt = pagos_sheet.range("E3").value
-            .
-            .
-            .
+            method = pagos_sheet.range("G3").value
+            amount = pagos_sheet.range("H3").value
 
-            client_account_sheet.api.Rows(4).Insert(Shift=-4121)  # Insert a new row at position 3
+            client_account_sheet.api.Rows(4).Insert(
+                Shift=-4121
+            )  # Insert a new row at position 4
 
             # Insert values into the new row in CTACTE sheet
-            client_account_sheet.range("E3").value = receipt
-            .
-            .
-            .
-            
+            client_account_sheet.range("B4").value = date
+            client_account_sheet.range("C4").value = client
+            client_account_sheet.range("F4").value = receipt
+            client_account_sheet.range("G4").value = method
+            client_account_sheet.range("H4").value = amount
+
             # Displays a message box
             root = tk.Tk()
             root.withdraw()  # Hide the root window
@@ -87,7 +91,39 @@ def save_payment(paymentType):
                 "Clientes: pago guardado correctamente :)",
                 f"Recibo de pago N°{math.floor(receipt)} fue guardado satisfactoriamente.",
             )  # Info message box
+
         case "provider":
-            return "provider"
+            # Retrieve values from PAGOS sheet
+            date = pagos_sheet.range("B10").value
+            client = pagos_sheet.range("D10").value
+            receipt = pagos_sheet.range("E10").value
+            method = pagos_sheet.range("G10").value
+            amount = pagos_sheet.range("H10").value
+
+            provider_account_sheet.api.Rows(4).Insert(
+                Shift=-4121
+            )  # Insert a new row at position 4
+
+            # Insert values into the new row in CTACTE sheet
+            provider_account_sheet.range("B4").value = date
+            provider_account_sheet.range("C4").value = client
+            provider_account_sheet.range("F4").value = receipt
+            provider_account_sheet.range("G4").value = method
+            provider_account_sheet.range("H4").value = amount
+
+            # Displays a message box
+            root = tk.Tk()
+            root.withdraw()  # Hide the root window
+            messagebox.showinfo(
+                "Clientes: pago guardado correctamente :)",
+                f"Recibo de pago N°{math.floor(receipt)} fue guardado satisfactoriamente.",
+            )  # Info message box
+
         case _:
-            return "default"
+            # Displays a message box
+            root = tk.Tk()
+            root.withdraw()  # Hide the root window
+            messagebox.showinfo(
+                f"ERROR: Fallo al guardar pagos",
+                f"No se han podido realizar el guardado de los nuevos pagos.",
+            )  # Info message box
