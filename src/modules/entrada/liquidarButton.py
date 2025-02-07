@@ -32,6 +32,7 @@ def liquidar_button(button):
     article = entrada_sheet.range(f"D{button_row}").value
     quantity = entrada_sheet.range(f"E{button_row}").value
     price = entrada_sheet.range(f"F{button_row}").value
+    entrada_sheet.range(f"G{button_row}").value = liquidaciones_sheet.range("D4").value
 
     liquidaciones_sheet.api.Rows(13).Insert(Shift=-4121)  # Inserts new empty row
     # Paste values to LIQUIDACIONES sheet
