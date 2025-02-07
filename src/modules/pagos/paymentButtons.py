@@ -1,12 +1,22 @@
 """ The following macro functions must be created in Excel and assigned to each button on the PAGOS sheet
 
 Sub clientNewReceiptButton()
-    RunPython "from src.modules.pagos.paymentButton import new_receipt; new_receipt('client')"
+    RunPython "from src.modules.pagos.paymentButtons import new_receipt; new_receipt('client')"
 End Sub
 
 Sub providerNewReceiptButton()
-    RunPython "from src.modules.pagos.paymentButton import new_receipt; new_receipt('provider')"
+    RunPython "from src.modules.pagos.paymentButtons import new_receipt; new_receipt('provider')"
 End Sub
+
+
+Sub clientSavePaymentButton()
+    RunPython "from src.modules.pagos.paymentButtons import save_payment; save_payment('client')"
+End Sub
+
+Sub providerSavePaymentButton()
+    RunPython "from src.modules.pagos.paymentButtons import save_payment; save_payment('provider')"
+End Sub
+
 """
 
 import math
