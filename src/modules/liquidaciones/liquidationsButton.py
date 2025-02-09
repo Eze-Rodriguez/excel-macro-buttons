@@ -20,7 +20,7 @@ def check_rows():
     for row in range(50, 12, -1):  # Search all rows
         if (
             liquidaciones_sheet.range(f"D{row}").value == footer_text
-        ):  # Adjust column if needed
+        ):
             footer_row = row
             break
 
