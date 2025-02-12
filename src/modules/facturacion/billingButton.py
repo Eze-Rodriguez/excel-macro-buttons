@@ -15,9 +15,9 @@ from tkinter import messagebox
 def check_rows():
     # Get the active workbook and sheet
     billing_sheet = xw.Book.caller().sheets["FACTURACION"]
-    for row in range(16, 31):  # Search for products in all rows
-        if billing_sheet.range(f"C{row}").value > 0:
-            rows_to_bill = []
+    rows_to_bill = []
+    for row in range(17, 31):  # Search for products in all rows
+        if billing_sheet.range(f"C{row}").value != None:
             rows_to_bill.append(row)
     return rows_to_bill
 
@@ -27,65 +27,64 @@ def new_billing():
     billing_sheet = xw.Book.caller().sheets["FACTURACION"]
 
     rows_to_bill = check_rows()
-    for row in rows_to_bill:
-        if isinstance(row, (int, float, complex)):
-            try:
-                # If data exists in the row, reset fields in entire row
+    if len(rows_to_bill) != 0:
+        # Get current billing number, ensuring it's a number (default to 0 if empty)
+        current_billing = billing_sheet.range("D4").value or 0
+        new_billing = billing_sheet.range("D4").value = current_billing + 1
+        billing_sheet.range("C2").value = date.today().strftime("%m/%d/%Y")
+        
+        # Delete all data from the rows to bill
+        for row in rows_to_bill:
+            billing_sheet.range(f"C{row}").value = "=BUSCARV($D$6;GALPON!$L$4:$AC$24;5;FALSO)" # Falta terminar
+            billing_sheet.range(f"G{row}").value = 0
 
-                # Get current billing number, ensuring it's a number (default to 0 if empty)
-                current_billing = billing_sheet.range("D4").value or 0
-                new_billing = billing_sheet.range("D4").value = current_billing + 1
-                billing_sheet.range("C2").value = date.today().strftime("%m/%d/%Y")
-                billing_sheet.range(f"C{row}").value = 0
+        # Displays a message box
+        root = tk.Tk()
+        root.withdraw()  # Hide the root window
+        messagebox.showinfo(
+            "Facturacion: nueva factura creada",
+            f"Se ha creado la factura N° {math.floor(new_billing)}.",
+        )  # Info message box
 
-                # Displays a message box
-                root = tk.Tk()
-                root.withdraw()  # Hide the root window
-                messagebox.showinfo(
-                    "Facturacion: nueva factura creada",
-                    f"Se ha creado la factura número N° {math.floor(new_billing)}.",
-                )  # Info message box
-            except ValueError:
-                print("Oops! Se esperaban un array de números. Ponerse en contacto con el administrador...")
 
 def save_billing():
     # Get the active workbook and sheet
     wb = xw.Book.caller()
     billing_sheet = wb.sheets["FACTURACION"]
-    x_sheet = wb.sheets["PROMEDIOVENTAS"]
+    account_sheet = wb.sheets["CTACTE"]
 
     row = check_rows()
-    if isinstance(row, (int, float, complex)):
-        provider_account_sheet.api.Rows(4).Insert(
-            Shift=-4121
-        )  # Insert a new row at position 4
+    if len(row) != 0:
+        if isinstance(row, (int, float, complex)):
+            account_sheet.api.Rows(3).Insert(
+                Shift=-4121
+            )  # Insert a new row at position 3
 
-        # Retrieve values from FACTURACION sheet
-        date = billing_sheet.range(f"B2").value
-        provider_name = billing_sheet.range(f"C5").value
-        billing_number = billing_sheet.range(f"D4").value
-        billing_total = billing_sheet.range(f"F{row}").value
+            # Retrieve values from FACTURACION sheet
+            date = billing_sheet.range(f"B2").value
+            client_name = billing_sheet.range(f"C5").value
+            billing_number = billing_sheet.range(f"D4").value
+            billing_total = billing_sheet.range(f"F{row}").value
 
-        # Paste values to CTACTEPROV sheet
-        provider_account_sheet.range(f"B4").value = date
-        provider_account_sheet.range(f"C4").value = provider_name
-        provider_account_sheet.range(f"D4").value = billing_number
-        provider_account_sheet.range(f"E4").value = billing_total
-        # Displays a message box
-        root = tk.Tk()
-        root.withdraw()  # Hide the root window
-        messagebox.showinfo(
-            "Facturacion: liquidación guardada",
-            f"Se ha guardado la liquidación número N° {math.floor(billing_number)} satisfactoriamente.",
-        )  # Info message box
-
+            # Paste values to PROMEDIO VENTAS sheet
+            account_sheet.range(f"B3").value = date
+            account_sheet.range(f"C3").value = client_name
+            account_sheet.range(f"D3").value = billing_number
+            account_sheet.range(f"E3").value = billing_total
+            # Displays a message box
+            root = tk.Tk()
+            root.withdraw()  # Hide the root window
+            messagebox.showinfo(
+                "Facturacion: factura guardada",
+                f"Se ha guardado la factura N° {math.floor(billing_number)} satisfactoriamente.",
+            )  # Info message box
     else:
         # Displays a message box
         root = tk.Tk()
-        root.withdraw()  # Hide the root window
+        root.withdraw()
         messagebox.showinfo(
-            "Atención: liquidación vacía",
-            f"No se han encontrado articulos para liquidar.",
+            "Atención: facturación vacía",
+            f"No se han encontrado articulos para facturar.",
         )  # Info message box
 
 
