@@ -17,13 +17,10 @@ def check_rows():
     liquidaciones_sheet = xw.Book.caller().sheets["LIQUIDACIONES"]
     # Detect the footer row by searching for the "TOTAL LIQUIDACIÓN" text
     footer_text = "TOTAL LIQUIDACION"
-    for row in range(50, 12, -1):  # Search all rows
-        if (
-            liquidaciones_sheet.range(f"D{row}").value == footer_text
-        ):
-            footer_row = row
-            return footer_row
-            break
+    for row in range(50, 12, -1):  # Search all rows from 50 to 12
+        if liquidaciones_sheet.range(f"D{row}").value == footer_text:
+            return row
+    return None  # Return None if the footer text is not found
 
 
 def new_liquidation():
@@ -35,10 +32,23 @@ def new_liquidation():
         # Define the start row for the table (below the header)
         start_row = 13  # Row where the table data starts (below the header)
 
+        # Get current liquidation number, ensuring it's a number (default to 0 if empty)
+        current_liquidation = liquidaciones_sheet.range("D4").value or 0
+        new_liquidation = liquidaciones_sheet.range("D4").value = (
+            current_liquidation + 1
+        )
+        liquidaciones_sheet.range("B2").value = date.today().strftime("%m/%d/%Y")
+        liquidaciones_sheet.range("C5:D5").value = None
+
         # Iterate through rows from bottom to top (to avoid skipping rows when deleting)
-        for row in range(footer_row - 1, start_row, -1):
-            # If data exists in the row, delete the entire row
-            liquidaciones_sheet.range(f"B13:F{row}").delete(shift="up")
+        for row in range(footer_row - 1, start_row - 1, -1):
+            if row != 13:
+                # If data exists in the row, delete the entire row
+                liquidaciones_sheet.range(f"B{row}:F{row}").delete(shift="up")
+            else:
+                # If data exists in the row, delete the entire row
+                liquidaciones_sheet.range(f"B13:F13").clear_contents()
+                liquidaciones_sheet.range(f"F13").formula = "=(C13*E13)"
 
         # Displays a message box
         root = tk.Tk()
@@ -63,8 +73,8 @@ def save_liquidation():
 
         # Retrieve values from LIQUIDACIONES sheet
         date = liquidaciones_sheet.range(f"B2").value
-        provider_name = liquidaciones_sheet.range(f"C5").value
         liquidation_number = liquidaciones_sheet.range(f"D4").value
+        provider_name = liquidaciones_sheet.range(f"C5").value
         liquidation_total = liquidaciones_sheet.range(f"F{row}").value
 
         # Paste values to CTACTEPROV sheet
