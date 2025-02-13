@@ -22,45 +22,23 @@ def check_rows():
             liquidaciones_sheet.range(f"D{row}").value == footer_text
         ):
             footer_row = row
+            return footer_row
             break
-
-    # Define the start row for the table (below the header)
-    start_row = 13  # Row where the table data starts (below the header)
-    columns_to_check = [
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-    ]  # Table columns to validate (Fecha, Cantidad, etc.)
-
-    # Iterate through rows from bottom to top (to avoid skipping rows when deleting)
-    for row in range(footer_row - 1, start_row - 1, -1):
-        # Check if the row contains data in the specified columns
-        has_data = any(
-            liquidaciones_sheet.range(f"{col}{row}").value for col in columns_to_check
-        )
-
-        if has_data:
-            return row
 
 
 def new_liquidation():
     # Get the active workbook and sheet
     liquidaciones_sheet = xw.Book.caller().sheets["LIQUIDACIONES"]
 
-    row = check_rows()
-    if isinstance(row, (int, float, complex)):
-        # If data exists in the row, delete the entire row
-        liquidaciones_sheet.range(f"B13:F{row}").delete(shift="up")
+    footer_row = check_rows()
+    if isinstance(footer_row, (int, float, complex)):
+        # Define the start row for the table (below the header)
+        start_row = 13  # Row where the table data starts (below the header)
 
-        # Get current liquidation number, ensuring it's a number (default to 0 if empty)
-        current_liquidation = liquidaciones_sheet.range("D4").value or 0
-        new_liquidation = liquidaciones_sheet.range("D4").value = (
-            current_liquidation + 1
-        )
-        liquidaciones_sheet.range("B2").value = date.today().strftime("%m/%d/%Y")
-        liquidaciones_sheet.range("C5:D5").value = None
+        # Iterate through rows from bottom to top (to avoid skipping rows when deleting)
+        for row in range(footer_row - 1, start_row, -1):
+            # If data exists in the row, delete the entire row
+            liquidaciones_sheet.range(f"B13:F{row}").delete(shift="up")
 
         # Displays a message box
         root = tk.Tk()
