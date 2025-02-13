@@ -20,7 +20,7 @@ def check_rows():
     for row in range(50, 12, -1):  # Search all rows
         if (
             liquidaciones_sheet.range(f"D{row}").value == footer_text
-        ):  # Adjust column if needed
+        ):
             footer_row = row
             break
 
@@ -67,7 +67,7 @@ def new_liquidation():
         root.withdraw()  # Hide the root window
         messagebox.showinfo(
             "Liquidaciones: nueva liquidación creada",
-            f"Se ha creado la liquidación número N° {math.floor(new_liquidation)}.",
+            f"Se ha creado la liquidación N° {math.floor(new_liquidation)}.",
         )  # Info message box
 
 
@@ -99,7 +99,7 @@ def save_liquidation():
         root.withdraw()  # Hide the root window
         messagebox.showinfo(
             "Liquidaciones: liquidación guardada",
-            f"Se ha guardado la liquidación número N° {math.floor(liquidation_number)} satisfactoriamente.",
+            f"Se ha guardado la liquidación N° {math.floor(liquidation_number)} satisfactoriamente.",
         )  # Info message box
 
     else:
