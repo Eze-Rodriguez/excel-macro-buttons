@@ -18,7 +18,9 @@ def check_rows():
     # Detect the footer row by searching for the "TOTAL LIQUIDACIÓN" text
     footer_text = "TOTAL LIQUIDACION"
     for row in range(50, 12, -1):  # Search all rows
-        if liquidaciones_sheet.range(f"D{row}").value == footer_text:
+        if (
+            liquidaciones_sheet.range(f"D{row}").value == footer_text
+        ):
             footer_row = row
             return footer_row
             break
@@ -83,7 +85,7 @@ def save_liquidation():
         root.withdraw()  # Hide the root window
         messagebox.showinfo(
             "Liquidaciones: liquidación guardada",
-            f"Se ha guardado la liquidación número N° {math.floor(liquidation_number)} satisfactoriamente.",
+            f"Se ha guardado la liquidación N° {math.floor(liquidation_number)} satisfactoriamente.",
         )  # Info message box
 
     else:
