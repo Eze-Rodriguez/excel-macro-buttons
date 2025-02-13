@@ -17,41 +17,12 @@ def check_rows():
     billing_sheet = xw.Book.caller().sheets["FACTURACION"]
     rows_to_bill = []
     for row in range(17, 31):  # Search for products in all rows
-        if billing_sheet.range(f"C{row}").value != None:
+        if (
+            billing_sheet.range(f"C{row}").value != 0
+            and billing_sheet.range(f"G{row}").value != 0
+        ):  # Check if the quantity and price are not 0
             rows_to_bill.append(row)
     return rows_to_bill
-
-
-def save_sales_average():
-    # Get the active workbook and sheet
-    wb = xw.Book.caller()
-    billing_sheet = wb.sheets["FACTURACION"]
-    sales_sheet = wb.sheets["PROMEDIO VENTAS"]
-
-    rows_to_save = check_rows()
-    if len(rows_to_save) != 0:
-        # Get the date and client name from FACTURACION sheet
-        date = billing_sheet.range("C2").value
-        client_name = billing_sheet.range(f"D8").value
-        
-        for row in rows_to_save:
-            sales_sheet.api.Rows(3).Insert(
-                Shift=-4121
-            )  # Insert a new row at position 3
-
-            # Paste each row values to PROMEDIO VENTAS sheet
-            # date
-            sales_sheet.range("B3").value = date
-            # client_name
-            sales_sheet.range("C3").value = client_name
-            # quantity
-            sales_sheet.range("D3").value = billing_sheet.range(f"D{row}").value
-            # article
-            sales_sheet.range("E3").value = billing_sheet.range(f"D{row}").value
-            # price
-            sales_sheet.range("F3").value = billing_sheet.range(f"D{row}").value
-            # article_total
-            sales_sheet.range("G3").value = billing_sheet.range(f"D{row}").value
 
 
 def save_billing():
@@ -88,8 +59,38 @@ def save_billing():
         root.withdraw()
         messagebox.showinfo(
             "Atención: facturación vacía",
-            f"No se han encontrado articulos para facturar.",
+            f"No se han encontrado articulos ni precios para facturar.",
         )  # Info message box
+
+
+def save_sales_average():
+    # Get the active workbook and sheet
+    wb = xw.Book.caller()
+    billing_sheet = wb.sheets["FACTURACION"]
+    sales_sheet = wb.sheets["PROMEDIOVENTAS"]
+
+    rows_to_save = check_rows()
+    if len(rows_to_save) != 0:
+        # Get the date and client name from FACTURACION sheet
+        date = billing_sheet.range("C2").value
+        client_name = billing_sheet.range(f"D8").value
+
+        for row in rows_to_save:
+            sales_sheet.range("B3:G3").insert(shift="down") # Insert a new row at position 3
+
+            # Paste each row values to PROMEDIOVENTAS sheet
+            # date
+            sales_sheet.range("B3").value = date
+            # client_name
+            sales_sheet.range("C3").value = client_name
+            # quantity
+            sales_sheet.range("D3").value = billing_sheet.range(f"C{row}").value
+            # article
+            sales_sheet.range("E3").value = billing_sheet.range(f"E{row}").value
+            # price
+            sales_sheet.range("F3").value = billing_sheet.range(f"G{row}").value
+            # article_total
+            sales_sheet.range("G3").value = billing_sheet.range(f"I{row}").value
 
 
 def new_billing():
@@ -107,9 +108,6 @@ def new_billing():
         billing_sheet.range(f"D5").value = 0
         # Delete all data from the rows to bill
         for row in rows_to_bill:
-            #############################################################################################################
-            # W.I.P Falta agregar el reseteo de los valores de las celdas cantidad desde la hoja GALPON
-            #############################################################################################################
             billing_sheet.range(f"G{row}").value = 0
 
         # Displays a message box
