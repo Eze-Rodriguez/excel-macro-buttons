@@ -67,7 +67,7 @@ def save_sales_average():
     # Get the active workbook and sheet
     wb = xw.Book.caller()
     billing_sheet = wb.sheets["FACTURACION"]
-    sales_sheet = wb.sheets["PROMEDIOVENTAS"]
+    sales_sheet = wb.sheets["VENTAS"]
 
     rows_to_save = check_rows()
     if len(rows_to_save) != 0:
