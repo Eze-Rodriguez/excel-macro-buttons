@@ -40,21 +40,13 @@ def new_liquidation():
             # If data exists in the row, delete the entire row
             liquidaciones_sheet.range(f"B13:F{row}").delete(shift="up")
 
-            # Get current liquidation number, ensuring it's a number (default to 0 if empty)
-            current_liquidation = liquidaciones_sheet.range("D4").value or 0
-            new_liquidation = liquidaciones_sheet.range("D4").value = (
-                current_liquidation + 1
-            )
-            liquidaciones_sheet.range("B2").value = date.today().strftime("%m/%d/%Y")
-            liquidaciones_sheet.range("C5:D5").value = None
-
-            # Displays a message box
-            root = tk.Tk()
-            root.withdraw()  # Hide the root window
-            messagebox.showinfo(
-                "Liquidaciones: nueva liquidación creada",
-                f"Se ha creado la liquidación N° {math.floor(new_liquidation)}.",
-            )  # Info message box
+        # Displays a message box
+        root = tk.Tk()
+        root.withdraw()  # Hide the root window
+        messagebox.showinfo(
+            "Liquidaciones: nueva liquidación creada",
+            f"Se ha creado la liquidación N° {math.floor(new_liquidation)}.",
+        )  # Info message box
 
 
 def save_liquidation():
