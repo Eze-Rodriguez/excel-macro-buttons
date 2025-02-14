@@ -15,11 +15,11 @@ Desarrollaremos codigos de Excel Macros para que realicen distintas funciones ne
 
 Antes de comenzar con la instalación, asegúrate de cumplir con los siguientes requisitos:
 
-Tener instalado Microsoft Excel (versión 2016 o superior recomendada).
+- Tener instalado Microsoft Excel (versión 2016 o superior recomendada).
 
-Tener instalado Python (versión 3.7 o superior recomendada).
+- Tener instalado Python (versión 3.7 o superior recomendada).
 
-Acceso a la línea de comandos (cmd o PowerShell).
+- Acceso a la línea de comandos (cmd o PowerShell).
 
 ### Paso 1: Verificar la instalación de Python
 
@@ -57,13 +57,13 @@ Si Excel estaba abierto, ciérralo y ábrelo nuevamente.
 
 Para que xlwings funcione correctamente, es necesario habilitar macros en Excel:
 
-Abre Excel y ve a Archivo > Opciones.
+- Abre Excel y ve a Archivo > Opciones.
 
-En el panel izquierdo, selecciona Centro de confianza > Configuración del Centro de confianza.
+- En el panel izquierdo, selecciona Centro de confianza > Configuración del Centro de confianza.
 
-Ve a Configuración de macros y selecciona Habilitar todas las macros (puede ser menos restrictivo según tus necesidades).
+- Ve a Configuración de macros y selecciona Habilitar todas las macros (puede ser menos restrictivo según tus necesidades).
 
-Guarda los cambios y cierra Excel.
+- Guarda los cambios y cierra Excel.
 
 ### Paso 5: Configurar xlwings
 
