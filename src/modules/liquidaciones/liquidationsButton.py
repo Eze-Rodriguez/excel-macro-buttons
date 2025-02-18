@@ -48,7 +48,7 @@ def new_liquidation():
             else:
                 # If data exists in the row, delete the entire row
                 liquidaciones_sheet.range(f"B13:F13").clear_contents()
-                liquidaciones_sheet.range(f"F13").formula = "=(C13*E13)"
+                liquidaciones_sheet.range(f"F13").formula = "=C13*E13"
 
         # Displays a message box
         root = tk.Tk()
