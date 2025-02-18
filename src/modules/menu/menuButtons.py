@@ -14,7 +14,7 @@ import xlwings as xw
 # Dictionary to map button names to sheet names
 BUTTON_TO_SHEET = {
     "FACTURAR": "FACTURACION",
-    "CTACTE CLIENTES": "CTACTE",
+    "CTACTE CLIENTES": "CTACTECLI",
     "CTACTE PROVEEDORES": "CTACTEPROV",
 }
 

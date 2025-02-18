@@ -95,7 +95,7 @@ def new_receipt(paymentType):
 def save_payment(paymentType):
     wb = xw.Book.caller()
     pagos_sheet = wb.sheets["PAGOS"]
-    client_account_sheet = wb.sheets["CTACTE"]
+    client_account_sheet = wb.sheets["CTACTECLI"]
     provider_account_sheet = wb.sheets["CTACTEPROV"]
 
     if check_payments(paymentType):
@@ -112,7 +112,7 @@ def save_payment(paymentType):
                     Shift=-4121
                 )  # Insert a new row at position 4
 
-                # Insert values into the new row in CTACTE sheet
+                # Insert values into the new row in CTACTECLI sheet
                 client_account_sheet.range("B4").value = date
                 client_account_sheet.range("C4").value = client
                 client_account_sheet.range("F4").value = receipt
@@ -139,7 +139,7 @@ def save_payment(paymentType):
                     Shift=-4121
                 )  # Insert a new row at position 4
 
-                # Insert values into the new row in CTACTE sheet
+                # Insert values into the new row in CTACTEPROV sheet
                 provider_account_sheet.range("B4").value = date
                 provider_account_sheet.range("C4").value = client
                 provider_account_sheet.range("F4").value = receipt
