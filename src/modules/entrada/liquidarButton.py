@@ -43,6 +43,7 @@ def liquidar_button(button):
     liquidaciones_sheet.range("C13").value = quantity
     liquidaciones_sheet.range("D13").value = article
     liquidaciones_sheet.range("E13").value = price
+    liquidaciones_sheet.range("F13").formula = f"=C13*E13" 
 
     # Change the font color in ENTRADA to green
     entrada_sheet.range(f"B{button_row}:G{button_row}").color = (10, 150, 10)  # Green
