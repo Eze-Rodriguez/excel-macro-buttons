@@ -38,13 +38,13 @@ def save_billing():
         # Retrieve values from FACTURACION sheet
         client_name = billing_sheet.range("D8").value
         billing_number = billing_sheet.range("D4").value
-        billing_total = billing_sheet.range("I34").value
+        billing_subtotal = billing_sheet.range("I32").value
 
         # Paste values to CTACTECLI sheet
         account_sheet.range(f"B4").value = date.today().strftime("%m/%d/%Y")
         account_sheet.range(f"C4").value = client_name
         account_sheet.range(f"D4").value = billing_number
-        account_sheet.range(f"E4").value = billing_total
+        account_sheet.range(f"E4").value = billing_subtotal
 
         # Displays a message box
         root = tk.Tk()
