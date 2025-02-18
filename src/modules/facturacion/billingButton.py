@@ -29,7 +29,7 @@ def save_billing():
     # Get the active workbook and sheet
     wb = xw.Book.caller()
     billing_sheet = wb.sheets["FACTURACION"]
-    account_sheet = wb.sheets["CTACTE"]
+    account_sheet = wb.sheets["CTACTECLI"]
 
     row = check_rows()
     if len(row) != 0:
@@ -40,7 +40,7 @@ def save_billing():
         billing_number = billing_sheet.range("D4").value
         billing_total = billing_sheet.range("I34").value
 
-        # Paste values to CTACTE sheet
+        # Paste values to CTACTECLI sheet
         account_sheet.range(f"B4").value = date.today().strftime("%m/%d/%Y")
         account_sheet.range(f"C4").value = client_name
         account_sheet.range(f"D4").value = billing_number
