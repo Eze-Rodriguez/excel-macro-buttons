@@ -18,7 +18,7 @@ def entry_button():
     galpon_sheet = wb.sheets["GALPON"]
     entrada_sheet = wb.sheets["ENTRADA"]
 
-    # Find the last row with data in column C
+    # Find the last row with data in column B
     last_row = galpon_sheet.range("B" + str(galpon_sheet.cells.last_cell.row)).end("up").row
 
     # Ensure there are entries to process
@@ -48,8 +48,10 @@ def entry_button():
             liquidar_shape.Placement = 1
             liquidar_shape.OnAction = "liquidateMerch"  # Assign macro
 
-            # Delete processed row in GALPON sheet
-            galpon_sheet.range(f"B{row}:F{row}").delete(shift="up")
+            # Clear the cells in GALPON sheet
+            galpon_sheet.range(f"B{row}").value = "" # Clear the cell provider code
+            galpon_sheet.range(f"D{row}").value = 0 # Clear the cell article code
+            galpon_sheet.range(f"F{row}").value = "" # Clear the cell quantity
 
         # Displays a message box
         root = tk.Tk()
