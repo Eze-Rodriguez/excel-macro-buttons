@@ -64,7 +64,7 @@ def entry_button():
         # Displays a message box
         root = tk.Tk()
         root.withdraw()  # Hide the root window
-        messagebox.showinfo(
+        messagebox.showerror(
             f"Atención: No existen entradas",
             f"No se han encontrado nuevas entradas para agregar.",
         )  # Info message box
