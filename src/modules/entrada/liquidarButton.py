@@ -31,8 +31,6 @@ def is_row_not_empty(button_row):
 
     for column in columns_to_check:
         cell_value = entrada_sheet.range(f"{column}{button_row}").value
-        print(cell_value)
-        # time.sleep(5)
         if cell_value is None or cell_value == "":
             return False  # There is an empty cell in the row
 
@@ -41,12 +39,14 @@ def is_row_not_empty(button_row):
 
 def is_new_liquidation_row(button_row):
     wb = xw.Book.caller()
-    entrada_sheet = wb.sheets["ENTRADA"]
-    provider = entrada_sheet.range(f"C{button_row}").value
+    liquidaciones_sheet = wb.sheets["LIQUIDACIONES"]
+    provider = liquidaciones_sheet.range("C5").value
 
     return messagebox.askyesno(
-        f"¿Nueva liquidacion?",
-        f"¿Desea crear una nueva liquidacion para {provider} y eliminar la liquidación actual? Si selecciona 'No', la entrada se añadirá a la liquidación actual.",
+        "¿Nueva Liquidación?",
+        f"Actualmente existe una liquidación en curso para {provider}.\n\n"
+        "¿Desea crear una nueva liquidación y eliminar la actual?\n"
+        "Si selecciona 'No', la entrada se añadirá a la liquidación existente.",
     )  # Yes/No message box
 
 
