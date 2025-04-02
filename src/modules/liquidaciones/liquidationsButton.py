@@ -45,6 +45,8 @@ def new_liquidation():
             if row != 13:
                 # If data exists in the row, delete the entire row
                 liquidaciones_sheet.range(f"B{row}:F{row}").delete(shift="up")
+                liquidaciones_sheet.range(f"A{row}").delete(shift="up")
+                liquidaciones_sheet.range(f"G{row}").delete(shift="up")
             else:
                 # If data exists in the row, delete the entire row
                 liquidaciones_sheet.range(f"B13:F13").clear_contents()
@@ -94,7 +96,7 @@ def save_liquidation():
         # Displays a message box
         root = tk.Tk()
         root.withdraw()  # Hide the root window
-        messagebox.showinfo(
+        messagebox.showerror(
             "Atención: liquidación vacía",
             f"No se han encontrado articulos para liquidar.",
         )  # Info message box

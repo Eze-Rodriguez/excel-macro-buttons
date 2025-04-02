@@ -57,7 +57,7 @@ def save_billing():
         # Displays a message box
         root = tk.Tk()
         root.withdraw()
-        messagebox.showinfo(
+        messagebox.showerror(
             "Atención: facturación vacía",
             f"No se han encontrado articulos ni precios para facturar.",
         )  # Info message box
