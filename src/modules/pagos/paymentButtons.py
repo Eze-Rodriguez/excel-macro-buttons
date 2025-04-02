@@ -158,7 +158,6 @@ def save_payment(paymentType):
                     "Proveedores: pago guardado correctamente :)",
                     f"Recibo de pago N°{math.floor(receipt)} fue guardado satisfactoriamente.",
                 )  # Info message box
-                root.destroy()
             case _:
                 # Displays a message box
                 root = tk.Tk()
@@ -188,13 +187,13 @@ def new_receipt(paymentType):
                 receipt_sheet.range("A1").value = date.today().strftime("%m/%d/%Y")
 
                 receipt_sheet.range("B3:C3").value = receipt
-                receipt_sheet.range("B4:C4").value = ""
+                receipt_sheet.range("B4:C4").value = client
 
                 receipt_sheet.range("C9:E9").value = payment_date
                 receipt_sheet.range("C10:E10").value = client
                 receipt_sheet.range("C12:E12").value = amount
                 receipt_sheet.range("C13:E13").value = method
-                receipt_sheet.range("C14:E14").value = ""
+                receipt_sheet.range("C14:E14").value = "Carlos Olivieri"
 
                 # Displays a message box
                 root = tk.Tk()
@@ -216,10 +215,10 @@ def new_receipt(paymentType):
                 receipt_sheet.range("A1").value = date.today().strftime("%m/%d/%Y")
 
                 receipt_sheet.range("B3:C3").value = receipt
-                receipt_sheet.range("B4:C4").value = ""
+                receipt_sheet.range("B4:C4").value = client
 
                 receipt_sheet.range("C9:E9").value = payment_date
-                receipt_sheet.range("C10:E10").value = ""
+                receipt_sheet.range("C10:E10").value = "Carlos Olivieri"
                 receipt_sheet.range("C12:E12").value = amount
                 receipt_sheet.range("C13:E13").value = method
                 receipt_sheet.range("C14:E14").value = client
