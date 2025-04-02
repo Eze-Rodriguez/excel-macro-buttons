@@ -1,4 +1,4 @@
-""" The following macro functions must be created in Excel and assigned to each button on the PAGOS sheet
+"""The following macro functions must be created in Excel and assigned to each button on the PAGOS sheet
 
 Sub clientSaveResetPaymentButton()
     RunPython "from src.modules.pagos.paymentButtons import save_reset_button; save_reset_button('client')"
@@ -11,10 +11,17 @@ End Sub
 """
 
 import math
-import xlwings as xw
-import tkinter as tk
 from datetime import date
+import tkinter as tk
 from tkinter import messagebox
+import xlwings as xw
+
+# Create a global Tkinter root instance
+root = tk.Tk()
+root.withdraw()  # Hide the root window
+root = tk.Tk()
+root.withdraw()  # Hide the root window
+
 
 def check_payments(paymentType):
     # Get the active workbook and sheet
@@ -24,22 +31,26 @@ def check_payments(paymentType):
         "client": ["B3", "C3", "F3", "H3"],
         "provider": ["B10", "C10", "F10", "H10"],
     }
-    if all(pagos_sheet.range(cell).value not in (None, 0) for cell in columns_to_reset[paymentType]):
+    if all(
+        pagos_sheet.range(cell).value not in (None, 0)
+        for cell in columns_to_reset[paymentType]
+    ):
         return True
     else:
         # Displays a message box
         root = tk.Tk()
-        root.withdraw()
+        root.withdraw()  # Hide the root window
         messagebox.showerror(
             "ERROR: No se puede guardar el pago",
             f"Por favor, complete todos los campos antes de guardar el pago.",
         )  # Info message box
+        root.destroy()
         return False
 
-def new_receipt(paymentType):
+
+def new_payment(paymentType):
     # Get the active workbook and sheet
     pagos_sheet = xw.Book.caller().sheets["PAGOS"]
-
     if check_payments(paymentType):
         match paymentType:
             case "client":
@@ -119,9 +130,6 @@ def save_payment(paymentType):
                 client_account_sheet.range("G4").value = method
                 client_account_sheet.range("H4").value = amount
 
-                # Displays a message box
-                root = tk.Tk()
-                root.withdraw()  # Hide the root window
                 messagebox.showinfo(
                     "Clientes: pago guardado correctamente :)",
                     f"Recibo de pago N°{math.floor(receipt)} fue guardado satisfactoriamente.",
@@ -146,13 +154,11 @@ def save_payment(paymentType):
                 provider_account_sheet.range("G4").value = method
                 provider_account_sheet.range("H4").value = amount
 
-                # Displays a message box
-                root = tk.Tk()
-                root.withdraw()  # Hide the root window
                 messagebox.showinfo(
-                    "Clientes: pago guardado correctamente :)",
+                    "Proveedores: pago guardado correctamente :)",
                     f"Recibo de pago N°{math.floor(receipt)} fue guardado satisfactoriamente.",
                 )  # Info message box
+                root.destroy()
             case _:
                 # Displays a message box
                 root = tk.Tk()
@@ -163,7 +169,91 @@ def save_payment(paymentType):
                 )  # Info message box
 
 
+def new_receipt(paymentType):
+    wb = xw.Book.caller()
+    pagos_sheet = wb.sheets["PAGOS"]
+    receipt_sheet = wb.sheets["RECIBOS"]
+
+    if check_payments(paymentType):
+        match paymentType:
+            case "client":
+                # Retrieve values from PAGOS sheet
+                payment_date = pagos_sheet.range("B3").value
+                client = pagos_sheet.range("D3").value
+                receipt = pagos_sheet.range("E3").value
+                method = pagos_sheet.range("G3").value
+                amount = pagos_sheet.range("H3").value
+
+                # Insert values into the respective row in RECIBOS sheet
+                receipt_sheet.range("A1").value = date.today().strftime("%m/%d/%Y")
+
+                receipt_sheet.range("B3:C3").value = receipt
+                receipt_sheet.range("B4:C4").value = ""
+
+                receipt_sheet.range("C9:E9").value = payment_date
+                receipt_sheet.range("C10:E10").value = client
+                receipt_sheet.range("C12:E12").value = amount
+                receipt_sheet.range("C13:E13").value = method
+                receipt_sheet.range("C14:E14").value = ""
+
+                # Displays a message box
+                root = tk.Tk()
+                root.withdraw()  # Hide the root window
+                messagebox.showinfo(
+                    "Clientes: nuevo recibo listo para imprimir",
+                    f"Recibo N°{math.floor(receipt)} para clientes listo para imprimir.",
+                )  # Info message box
+
+            case "provider":
+                # Retrieve values from PAGOS sheet
+                payment_date = pagos_sheet.range("B10").value
+                client = pagos_sheet.range("D10").value
+                receipt = pagos_sheet.range("E10").value
+                method = pagos_sheet.range("G10").value
+                amount = pagos_sheet.range("H10").value
+
+                # Insert values into the respective row in RECIBOS sheet
+                receipt_sheet.range("A1").value = date.today().strftime("%m/%d/%Y")
+
+                receipt_sheet.range("B3:C3").value = receipt
+                receipt_sheet.range("B4:C4").value = ""
+
+                receipt_sheet.range("C9:E9").value = payment_date
+                receipt_sheet.range("C10:E10").value = ""
+                receipt_sheet.range("C12:E12").value = amount
+                receipt_sheet.range("C13:E13").value = method
+                receipt_sheet.range("C14:E14").value = client
+
+                # Displays a message box
+                root = tk.Tk()
+                root.withdraw()  # Hide the root window
+                messagebox.showinfo(
+                    "Proveedores: nuevo recibo listo para imprimir",
+                    f"Recibo N°{math.floor(receipt)} para proveedores listo para imprimir.",
+                )  # Info message box
+            case _:
+                # Displays a message box
+                root.withdraw()  # Hide the root window
+                messagebox.showerror(
+                    f"ERROR: Fallo al guardar pagos",
+                    f"No se han podido realizar el guardado de los nuevos pagos.",
+                )  # Info message box
+
+
 # MAIN FUNCTION
 def save_reset_button(paymentType):
-    save_payment(paymentType),  # First step is save the payment
-    new_receipt(paymentType)  # Second step is delete all data and create a new payment
+    """
+    Executes a sequence of operations for handling payments:
+    1. Saves the payment details to the corresponding sheet.
+    2. Creates a new receipt for the payment.
+    3. Resets the payment fields for a new transaction.
+
+    Args:
+        paymentType (str): Specifies the type of payment, either 'client' or 'provider'.
+
+    Returns:
+        None
+    """
+    save_payment(paymentType)  # Save the payment details to the corresponding sheet
+    new_receipt(paymentType)  # Generate a new receipt for the payment
+    new_payment(paymentType)  # Reset the payment fields for a new transaction
