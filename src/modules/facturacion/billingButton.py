@@ -16,7 +16,7 @@ def check_rows():
     # Get the active workbook and sheet
     billing_sheet = xw.Book.caller().sheets["FACTURACION"]
     rows_to_bill = []
-    for row in range(17, 31):  # Search for products in all rows
+    for row in range(17, 32):  # Search for products in all rows
         if (
             billing_sheet.range(f"C{row}").value != 0
             and billing_sheet.range(f"G{row}").value != 0
